@@ -3,9 +3,6 @@
 use strict;
 use warnings;
 use Alien::OpenMP;
-use OpenMP::Environment ();
-use Getopt::Long qw/GetOptionsFromArray/;
-use Util::H2O qw/h2o/;
 
 # build and load subroutines
 use Inline ( 
@@ -28,6 +25,16 @@ void get_localtime(SV * utc) {
 
   Inline_Stack_Vars;
   Inline_Stack_Reset;
+
+/*
+ * The series of 'single' blocks remove the implicit
+ * barrier via the 'nowait' clause; this means that
+ * 'Inline_Stack_Push' happens by all threads; this
+ * call is demonstrably not thread safe; the results
+ * of '@parts' varies wildly - including frequent
+ * segmentation faults
+*/
+
   #pragma omp parallel
   {
     #pragma omp single nowait
