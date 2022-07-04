@@ -3,9 +3,6 @@
 use strict;
 use warnings;
 use Alien::OpenMP;
-use OpenMP::Environment ();
-use Getopt::Long qw/GetOptionsFromArray/;
-use Util::H2O qw/h2o/;
 
 # build and load subroutines
 use Inline ( 
